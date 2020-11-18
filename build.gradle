@@ -116,10 +116,16 @@ repositories {
         name = "JEI"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    maven {
+        name = "MelanX Maven"
+        url = "https://maven.melanx.de/"
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    compile fg.deobf("io.github.noeppi_noeppi.mods:LibX:1.16.3-${libx_version}")
+
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 }
 

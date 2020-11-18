@@ -6,7 +6,7 @@ issueTrackerURL="http://www.github.com/MelanX/yellowsnow/issues/"
 [[mods]]
 modId="yellowsnow"
 version="${file.jarVersion}"
-displayName="Mod ID"
+displayName="Yellow Snow"
 updateJSONURL="https://raw.githubusercontent.com/MelanX/mod-updatechecker-files/master/yellowsnow.json"
 displayURL="www.curseforge.com/members/melanx/"
 #logoFile="yellowsnow.png"
