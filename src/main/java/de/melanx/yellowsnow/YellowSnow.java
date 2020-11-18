@@ -1,18 +1,18 @@
-package de.melanx.modid;
+package de.melanx.yellowsnow;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(ModName.MODID)
-public class ModName {
+@Mod(YellowSnow.MODID)
+public class YellowSnow {
 
-    public static final String MODID = "modid";
+    public static final String MODID = "yellowsnow";
     private static final Logger LOGGER = LogManager.getLogger(MODID);
-    public ModName instance;
+    public YellowSnow instance;
 
-    public ModName() {
+    public YellowSnow() {
         instance = this;
 
         MinecraftForge.EVENT_BUS.register(this);
