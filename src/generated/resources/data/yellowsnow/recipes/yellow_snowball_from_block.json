@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "yellowsnow:yellow_snowball_from_block",
+  "ingredients": [
+    {
+      "item": "yellowsnow:yellow_snow_block"
+    }
+  ],
+  "result": {
+    "item": "yellowsnow:yellow_snowball",
+    "count": 4
+  }
+}

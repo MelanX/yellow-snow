@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "yellowsnow:block/yellow_snow_block"
+    }
+  }
+}

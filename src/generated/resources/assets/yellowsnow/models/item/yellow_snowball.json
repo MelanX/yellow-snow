@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "yellowsnow:item/yellow_snowball"
+  }
+}

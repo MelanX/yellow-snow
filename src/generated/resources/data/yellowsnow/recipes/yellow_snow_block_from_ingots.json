@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "yellowsnow:yellow_snow_block_from_ingots",
+  "pattern": [
+    "aa",
+    "aa"
+  ],
+  "key": {
+    "a": {
+      "item": "yellowsnow:yellow_snowball"
+    }
+  },
+  "result": {
+    "item": "yellowsnow:yellow_snow_block"
+  }
+}

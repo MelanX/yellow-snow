@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "package": "de.melanx.yellowsnow.mixin",
+  "refmap": "yellowsnow.refmap.json",
+  "mixins": [
+    "MixinSpreadableSnowyDirtBlock",
+    "MixinSnowyDirtBlock"
+  ]
+}
