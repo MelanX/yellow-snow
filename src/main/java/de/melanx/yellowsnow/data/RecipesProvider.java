@@ -17,6 +17,6 @@ public class RecipesProvider extends RecipeProviderBase {
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
-        this.makeSmallBlockItem(consumer, ModBlocks.YELLOW_SNOW_BLOCK, ModItems.YELLOW_SNOWBALL);
+        this.makeSmallBlockItem(consumer, ModBlocks.YELLOW_SNOW_BLOCK, ModItems.YELLOW_SNOWBALL, false);
     }
 }
