@@ -92,6 +92,13 @@ public class Events {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlaceBlock(BlockEvent.EntityPlaceEvent event) {
+        if (ModList.get().isLoaded("naughtyornice")) {
+            NaughtyOrNice.onPlaceBlock(event);
+        }
+    }
+
     private static boolean isSamePos(BlockPos oldPos, BlockPos currentPos) {
         return oldPos.getX() == currentPos.getX() && oldPos.getY() == currentPos.getY() && oldPos.getZ() == currentPos.getZ();
     }
