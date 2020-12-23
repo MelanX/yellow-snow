@@ -131,6 +131,10 @@ repositories {
         name = "MelanX Maven"
         url = "https://maven.melanx.de/"
     }
+    maven {
+        name = "CurseMaven"
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -138,6 +142,7 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:0.8.2:processor"
 
     compile fg.deobf("io.github.noeppi_noeppi.mods:LibX:1.16.3-${libx_version}")
+    compile fg.deobf('curse.maven:naughty-or-nice-426690:3135674')
 
 //    runtimeOnly fg.deobf("de.melanx.recipeprinter:recipeprinter-1.16.3:2.0.0")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")

@@ -1,6 +1,7 @@
 package de.melanx.yellowsnow.core;
 
 import de.melanx.yellowsnow.ServerConfig;
+import de.melanx.yellowsnow.compat.NaughtyOrNice;
 import de.melanx.yellowsnow.core.registration.ModBlocks;
 import de.melanx.yellowsnow.core.registration.ModItems;
 import net.minecraft.block.BlockState;
@@ -15,7 +16,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -24,6 +27,9 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = "yellowsnow", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Events {
+
+    private static final HashMap<UUID, Pair<BlockPos, Integer>> entityMap = new HashMap<>();
+
     @SubscribeEvent
     public static void onHitEntity(LivingAttackEvent event) {
         DamageSource source = event.getSource();
@@ -34,8 +40,6 @@ public class Events {
             }
         }
     }
-
-    private static final HashMap<UUID, Pair<BlockPos, Integer>> entityMap = new HashMap<>();
 
     @SubscribeEvent
     public static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
@@ -78,6 +82,13 @@ public class Events {
             } else {
                 entityMap.put(uuid, Pair.of(pos, 0));
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBreakBlock(BlockEvent.BreakEvent event) {
+        if (ModList.get().isLoaded("naughtyornice")) {
+            NaughtyOrNice.onHarvestBlock(event);
         }
     }
 
