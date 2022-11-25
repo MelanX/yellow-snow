@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[35,)"
+loaderVersion="[43,)"
 license="Apache License"
 issueTrackerURL="http://www.github.com/MelanX/yellowsnow/issues/"
 
@@ -7,25 +7,31 @@ issueTrackerURL="http://www.github.com/MelanX/yellowsnow/issues/"
 modId="yellowsnow"
 version="${file.jarVersion}"
 displayName="Yellow Snow"
-updateJSONURL="https://raw.githubusercontent.com/MelanX/mod-updatechecker-files/master/yellowsnow.json"
+updateJSONURL="https://assets.melanx.de/updates/yellow-snow.json"
 displayURL="www.curseforge.com/members/melanx/"
 #logoFile="yellowsnow.png"
-credits=""
 authors="MelanX"
 description='''
-
+Don't eat yellow snow.
 '''
 
 [[dependencies.yellowsnow]]
     modId="forge"
     mandatory=true
-    versionRange="[35,)"
+    versionRange="[43.1.47,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.yellowsnow]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.4, 1.17)"
+    versionRange="[1.19.2, 1.20)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.yellowsnow]]
+    modId="libx"
+    mandatory=true
+    versionRange="[1.19.2-4.2.5,)"
     ordering="NONE"
     side="BOTH"

@@ -1,22 +1,22 @@
 package de.melanx.yellowsnow.items;
 
 import de.melanx.yellowsnow.YellowSnow;
-import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.mod.registration.ItemBase;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+import org.moddingx.libx.base.ItemBase;
+import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class YellowSnowballItem extends ItemBase {
 
-    public static final TranslationTextComponent DONT_EAT = new TranslationTextComponent("tooltip." + YellowSnow.getInstance().modid + ".dont_eat");
+    public static final MutableComponent DONT_EAT = Component.translatable("tooltip." + YellowSnow.getInstance().modid + ".dont_eat");
 
     public YellowSnowballItem(ModX mod, Properties properties) {
         super(mod, properties);
@@ -32,27 +32,27 @@ public class YellowSnowballItem extends ItemBase {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-        if (!world.isRemote) {
-            SnowballEntity snowballentity = new SnowballEntity(world, player);
-            snowballentity.setItem(stack);
-            snowballentity.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
-            world.addEntity(snowballentity);
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5f, 0.4f / (level.random.nextFloat() * 0.4f + 0.8f));
+        if (!level.isClientSide) {
+            Snowball snowball = new Snowball(level, player);
+            snowball.setItem(stack);
+            snowball.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, 1.5f, 1.0f);
+            level.addFreshEntity(snowball);
         }
 
-        player.addStat(Stats.ITEM_USED.get(this));
-        if (!player.abilities.isCreativeMode) {
+        player.awardStat(Stats.ITEM_USED.get(this));
+        if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
 
-        return ActionResult.func_233538_a_(stack, world.isRemote());
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
-        super.addInformation(stack, world, tooltip, flag);
-        tooltip.add(YellowSnowballItem.DONT_EAT.mergeStyle(TextFormatting.DARK_RED));
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> tooltip, @NotNull TooltipFlag isAdvanced) {
+        super.appendHoverText(stack, level, tooltip, isAdvanced);
+        tooltip.add(YellowSnowballItem.DONT_EAT.withStyle(ChatFormatting.DARK_RED));
     }
 }

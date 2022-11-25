@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/snow_height4",
   "textures": {
-    "texture": "yellowsnow:block/yellow_snow",
-    "particle": "yellowsnow:block/yellow_snow"
+    "particle": "yellowsnow:block/yellow_snow",
+    "texture": "yellowsnow:block/yellow_snow"
   }
 }

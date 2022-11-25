@@ -1,52 +1,47 @@
 package de.melanx.yellowsnow;
 
-import de.melanx.yellowsnow.core.registration.ModBlocks;
+import de.melanx.yellowsnow.core.EventHandler;
 import de.melanx.yellowsnow.core.registration.ModItems;
-import de.melanx.yellowsnow.data.DataCreator;
-import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.dispenser.ProjectileDispenseBehavior;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Util;
-import net.minecraft.world.World;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraft.Util;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLConfig;
-import net.minecraftforge.fml.loading.FMLPaths;
+import org.moddingx.libx.mod.ModXRegistration;
+import org.moddingx.libx.registration.RegistrationBuilder;
 
 import javax.annotation.Nonnull;
 
 @Mod("yellowsnow")
-public class YellowSnow extends ModXRegistration {
+public final class YellowSnow extends ModXRegistration {
 
     private static YellowSnow instance;
 
     public YellowSnow() {
-        super("yellowsnow", new ItemGroup("yellowsnow") {
+        super(new CreativeModeTab("yellowsnow") {
+
             @Nonnull
             @Override
-            public ItemStack createIcon() {
-                return new ItemStack(ModItems.YELLOW_SNOWBALL);
+            public ItemStack makeIcon() {
+                return new ItemStack(ModItems.yellowSnowball);
             }
         });
         instance = this;
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
-        ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(this.modid + "-server.toml"));
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
+    }
 
-        this.addRegistrationHandler(ModBlocks::register);
-        this.addRegistrationHandler(ModItems::register);
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        eventBus.addListener(DataCreator::onGatherData);
+    @Override
+    protected void initRegistration(RegistrationBuilder builder) {
+
     }
 
     @Nonnull
@@ -55,13 +50,11 @@ public class YellowSnow extends ModXRegistration {
     }
 
     @Override
-    protected void setup(FMLCommonSetupEvent fmlCommonSetupEvent) {
-        DispenserBlock.registerDispenseBehavior(ModItems.YELLOW_SNOWBALL, new ProjectileDispenseBehavior() {
+    protected void setup(FMLCommonSetupEvent event) {
+        DispenserBlock.registerBehavior(ModItems.yellowSnowball, new AbstractProjectileDispenseBehavior() {
             @Nonnull
-            protected ProjectileEntity getProjectileEntity(@Nonnull World world, @Nonnull IPosition pos, ItemStack stack) {
-                return Util.make(new SnowballEntity(world, pos.getX(), pos.getY(), pos.getZ()), (snowball) -> {
-                    snowball.setItem(stack);
-                });
+            protected Projectile getProjectile(@Nonnull Level level, @Nonnull Position pos, @Nonnull ItemStack stack) {
+                return Util.make(new Snowball(level, pos.x(), pos.y(), pos.z()), snowball -> snowball.setItem(stack));
             }
         });
     }

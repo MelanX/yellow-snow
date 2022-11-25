@@ -1,55 +1,62 @@
 package de.melanx.yellowsnow.blocks;
 
-import com.google.common.collect.ImmutableSet;
 import de.melanx.yellowsnow.YellowSnow;
-import de.melanx.yellowsnow.core.registration.ModBlocks;
 import de.melanx.yellowsnow.items.YellowSnowballItem;
-import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SnowBlock;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.registration.Registerable;
+import org.moddingx.libx.registration.RegistrationContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
-public class YellowSnowLayerBlock extends SnowBlock implements Registerable {
+public class YellowSnowLayerBlock extends SnowLayerBlock implements Registerable {
     private final Item item;
 
     public YellowSnowLayerBlock(Properties properties) {
         super(properties);
-        this.item = new BlockItem(this, new Item.Properties().group(YellowSnow.getInstance().tab));
+        //noinspection ConstantConditions
+        this.item = new BlockItem(this, new Item.Properties().tab(YellowSnow.getInstance().tab));
     }
 
     @Override
-    public Set<Object> getAdditionalRegisters() {
-        return ImmutableSet.of(this.item);
-    }
-
-    @Override
-    public void randomTick(@Nonnull BlockState state, @Nonnull ServerWorld world, @Nonnull BlockPos pos, @Nonnull Random random) {
-        if (world.getWorldInfo().isRaining() && world.getBiome(pos).getPrecipitation() == Biome.RainType.SNOW) {
-            world.setBlockState(pos, Blocks.SNOW.getDefaultState().with(BlockStateProperties.LAYERS_1_8, state.get(BlockStateProperties.LAYERS_1_8)));
+    public void randomTick(@Nonnull BlockState state, @Nonnull ServerLevel level, @Nonnull BlockPos pos, @Nonnull RandomSource random) {
+        if (level.getLevelData().isRaining() && level.getBiome(pos).value().getPrecipitation() == Biome.Precipitation.SNOW) {
+            level.setBlock(pos, Blocks.SNOW.defaultBlockState().setValue(BlockStateProperties.LAYERS, state.getValue(BlockStateProperties.LAYERS)), Block.UPDATE_ALL);
         }
-        YellowSnowBlock.spreadYellowSnow(world, pos, random);
+        YellowSnowBlock.spreadYellowSnow(level, pos, random);
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
-        super.addInformation(stack, world, tooltip, flag);
-        tooltip.add(YellowSnowballItem.DONT_EAT.mergeStyle(TextFormatting.DARK_RED));
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable BlockGetter level, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        tooltip.add(YellowSnowballItem.DONT_EAT.withStyle(ChatFormatting.DARK_RED));
+    }
+
+    @Override
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        builder.register(Registry.ITEM_REGISTRY, this.item);
+    }
+
+    @Override
+    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
+        builder.track(ForgeRegistries.ITEMS, YellowSnowLayerBlock.class.getDeclaredField("item"));
     }
 }
