@@ -5,8 +5,6 @@ import de.melanx.yellowsnow.core.registration.ModItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -34,15 +32,15 @@ public class LootTables extends BlockLootProviderBase {
         this.customLootTable(ModBlocks.yellowSnow, block -> LootTable.lootTable().withPool(LootPool.lootPool()
                         .when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS))
                         .add(AlternativesEntry.alternatives(
-                                        AlternativesEntry.alternatives(SnowLayerBlock.LAYERS.getPossibleValues(), (amount) -> LootItem.lootTableItem(Items.SNOWBALL)
+                                        AlternativesEntry.alternatives(SnowLayerBlock.LAYERS.getPossibleValues(), (amount) -> LootItem.lootTableItem(ModItems.yellowSnowball)
                                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                                                         .setProperties(StatePropertiesPredicate.Builder.properties()
                                                                 .hasProperty(SnowLayerBlock.LAYERS, amount)))
                                                 .apply(SetItemCountFunction
                                                         .setCount(ConstantValue.exactly(amount)))).when(BlockLoot.HAS_NO_SILK_TOUCH),
                                         AlternativesEntry.alternatives(SnowLayerBlock.LAYERS.getPossibleValues(), (amount) -> amount == 8
-                                                ? LootItem.lootTableItem(Blocks.SNOW_BLOCK)
-                                                : LootItem.lootTableItem(Blocks.SNOW)
+                                                ? LootItem.lootTableItem(ModBlocks.yellowSnowBlock)
+                                                : LootItem.lootTableItem(ModBlocks.yellowSnow)
                                                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) amount)))
                                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                                                         .setProperties(StatePropertiesPredicate.Builder.properties()

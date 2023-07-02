@@ -8,7 +8,7 @@ apply plugin: 'org.moddingx.modgradle.cursedep'
 repositories {
     maven {
         name = "JEI"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        url = "https://modmaven.dev/"
     }
     maven {
         name = "MelanX Maven"
